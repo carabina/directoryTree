@@ -24,7 +24,7 @@
                 <br/>
                 <h2 class="text-center">directoryTree Example</h2>
                 <h3 class="text-center"><a class="text-center" href="https://github.com/samzscott/directoryTree">Check out the source on Github</a></h3>
-                <h3 class="text-center"><a class="text-center" href="selectmultiple.html">Select Multiple Items Example</a></h3>
+                <h3 class="text-center"><a class="text-center" href="index.html">Select Only One Item Example</a></h3>
                 <br/>
                 <div class="btn-group btn-group-justified">
                     <div class="btn-group">
@@ -49,8 +49,8 @@
         var filepaths = ["/wordpresssite.com/wp-includes/css", "/wordpresssite.com/wp-includes/images", "/wordpresssite.com/wp-includes/js", "/wordpresssite.com/wp-includes/pomodoro", "/wordpresssite.com/wp-includes/SimplePie", "/wordpresssite.com/wp-includes/Text", "/wordpresssite.com/wp-includes/theme-compat", "/samplesite.com", "/samplesite.com/stripe", "/samplesite.com/stripe/includes", "/samplesite.com/sample", "/samplesite.com/sample/css", "/samplesite.com/sample/fonts", "/samplesite.com/sample/images", "/samplesite.com/sample/js", "/ecommerce.com", "/ecommerce.com/checkout", "/ecommerce.com/checkout/467as", "/ecommerce.com/checkout/467ob", "/ecommerce.com/checkout/467jr", "/ecommerce.com/checkout/467is", "/ecommerce.com/stats", "/ecommerce.com/portfoliox", "/ecommerce.com/portfoliox/glare", "/ecommerce.com/codesample", "/ecommerce.com/ponder", "/ecommerce.com/ponder/dist", "/ecommerce.com/ponder/favicon", "/ecommerce.com/ponder/images", "/ecommerce.com/ponder/build", "/ecommerce.com/ponder/venv", "/ecommerce.com/mrpe", "/ecommerce.com/mrpe/wp-admin", "/ecommerce.com/mrpe/wp-content", "/ecommerce.com/mrpe/wp-includes", "/ecommerce.com/crlt", "/ecommerce.com/e3w", "/ecommerce.com/e3w/wp-admin", "/ecommerce.com/e3w/wp-content", "/ecommerce.com/e3w/wp-includes", "/enterprisesite.com", "/snapple.com", "/snapple.com/resources", "/snapple.com/resources/css", "/snapple.com/resources/images"];
 
         // attach the plugin to an element
-        // select multiple items paramater is false
-        $('#directoryTree_container').directoryTree([filepaths, false]);
+        // select multiple items paramater is true
+        $('#directoryTree_container').directoryTree([filepaths, true]);
 
         //register event handlers
         $('.directoryTree_expand').click(function (e) {

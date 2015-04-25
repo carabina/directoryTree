@@ -7,9 +7,9 @@
 
 
 (function($) {
-    // Input is the (unique) ID of the containing element and pathArray is an array of directory entry objects 
-    // usage example: "$('#element').directoryTree(["/folder1", "/folder1/folder2", "/folder1/folder2/image.jpg"]);"
-    $.directoryTree = function(containerID, pathArray) {
+    // Input is an array containing an array of filepath strings, and a boolean indicating whether more than one item can be selected.
+    // usage example: "$('#element').directoryTree([["/folder1", "/folder1/folder2", "/folder1/folder2/image.jpg"], false]);"
+    $.directoryTree = function(containerID, options) {
 
         //--------------- Initialization ---------------
         // the current instance of the object
@@ -17,8 +17,8 @@
 
         // CSS classes/behavior paramaters
         var containerClassname = "directoryTree";
-        var radioButtonClassname = 'directorytreeradio';
-        var rootRadioButtonClassname = 'rootradio';
+        var selectElementClassname = 'directorytree-select';
+        var rootSelectElementClassname = 'directorytree-rootselect';
         var firstLevelULClassname = 'firstlevel-ul';
         var childULClassname = 'child-ul';
         var hasChildrenClassname = 'has-children';
@@ -28,29 +28,39 @@
         var pathData = {};
 
         var defaults = {
-            paths : []
+            paths : [],
+            select_multiple : false
         }
 
         // access plugin.settings via:
         // "plugin.settings.propertyName" from inside the plugin
         // "element.data('directoryTree').settings.propertyName" from outside the plugin (where "element" is the element the plugin is attached to)
         plugin.settings = {}
-
         var container = $(containerID);
 
         plugin.init = function() {
             container.addClass(containerClassname);
-            plugin.reloadData(pathArray);
+            plugin.settings.select_multiple = options[1];
+            plugin.reloadData(options[0]);
             $(document).on('click', '#'+ container.attr('id') +' ul li > span', function(e) {
                 var node = $(e.target).parent();
                 node.children('ul').slideToggle(slideSpeed);
                 e.stopImmediatePropagation();
             });
-            $(document).on('change', '.'+radioButtonClassname, function() {
-                $('.'+radioButtonClassname).not(this).prop('checked', false);
-            });
+            if (plugin.settings.select_multiple){
+                // is a checkbox - (de)select all children
+                $(document).on('change', '.'+selectElementClassname, function() {
+                    var parent = $(this).closest( "li" );
+                    var checked = $(this).prop('checked');
+                    parent.find('.'+selectElementClassname).each(function() { $(this).prop('checked', checked); });
+                });
+            } else {
+                // radio button - only one can be selected
+                $(document).on('change', '.'+selectElementClassname, function() {
+                    $('.'+selectElementClassname).not(this).prop('checked', false);
+                });
+            }
         }
-
 
         //--------------- Public Methods ---------------
         // element.data('directoryTree').publicMethod(arg1, arg2, ... argn) from outside the plugin (where "element" is the element the plugin is attached to)
@@ -66,11 +76,15 @@
             container.html(genTemplateStart(pathData));
             plugin.collapseAll();
             $('.'+firstLevelULClassname).slideToggle(slideSpeed);
-            $('.'+rootRadioButtonClassname).prop('checked', true);
+            if (!plugin.settings.select_multiple){
+                $('.'+rootSelectElementClassname).prop('checked', true);
+            }
         }
 
-        plugin.selectedJSON = function() {
-            return $('.'+radioButtonClassname+':checked').val();
+        plugin.selectedItems = function() {
+            var returnArray = [];
+            $('.'+selectElementClassname+':checked').each(function() { returnArray.push($(this).val()) });
+            return returnArray;
         }
 
         plugin.expandAll = function () {
@@ -102,7 +116,7 @@
             var tempstr = '<ul class="'+((level == 1) ? firstLevelULClassname : childULClassname)+'">';
             $.each(dirPaths, function(index, parent) {
                 tempstr += '<li class="'+(!$.isEmptyObject(parent.children) ? hasChildrenClassname : noChildrenClassname) +'">';
-                tempstr += '<span><input type="radio" class="'+radioButtonClassname+'" value="'+parent.path+'"> '+parent.name +'</span>';
+                tempstr += '<span><input type="'+((plugin.settings.select_multiple) ? 'checkbox' : 'radio')+'" class="'+selectElementClassname+'" value="'+parent.path+'"> '+parent.name +'</span>';
                 if (!$.isEmptyObject(parent.children)) {
                     tempstr += genTemplate(parent.children, level+1);
                 }
@@ -113,7 +127,7 @@
         }
 
         var genTemplateStart = function(dirPaths){
-            return '<ul class="root-ul"><li class="'+hasChildrenClassname+'"><span><input type="radio" class="'+radioButtonClassname+' '+rootRadioButtonClassname+'" value="/"> /</span>' + genTemplate(dirPaths,1) + '</li></ul>';
+            return '<ul class="root-ul"><li class="'+hasChildrenClassname+'"><span><input type="'+((plugin.settings.select_multiple) ? 'checkbox' : 'radio')+'" class="'+selectElementClassname+' '+rootSelectElementClassname+'" value="/"> /</span>' + genTemplate(dirPaths,1) + '</li></ul>';
         }
 
         plugin.init();
