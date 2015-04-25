@@ -1,6 +1,6 @@
 # directoryTree.js
 
-jQuery Plugin for displaying an array of filepaths as a browsable directory list. Plays nice with Bootstrap 3. Tested with jQuery v2.1.3.
+jQuery Plugin for displaying an array of filepaths as a browsable, hierarchical directory (tree) structure. Plays nice with Bootstrap 3. Tested with jQuery v2.1.3.
 
 ##Demo
 http://samzscott.com/directoryTree

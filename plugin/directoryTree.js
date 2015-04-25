@@ -1,5 +1,5 @@
 // directoryTree jQuery Plugin
-// For displaying an array of filepaths as a browsable directory list.
+// For displaying an array of filepaths as a browsable, hierarchical directory (tree) structure.
 // version 1.0, May 24th, 2014
 // The MIT License (MIT)
 // Copyright (c) 2015 Sam Scott (http://samzscott.com)
